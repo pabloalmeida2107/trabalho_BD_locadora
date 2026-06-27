@@ -9,7 +9,8 @@ public record MovieResponseDTO(
         String sinopse,
         Integer releaseYear,
         Integer durationMin,
-        String rating,
-        List<String> genres
+        Integer rating,
+        String genre
+
 ) {
 }

@@ -34,19 +34,21 @@ public class Movie {
     @Column(nullable = false)
     private Integer rating;
 
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MovieGenre> movieGenres = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "genre_id")
+    private Genre genre;
 
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Copy> copies = new ArrayList<>();
 
-    public Movie(String title, String sinopse, Integer releaseYear, Integer durationMin, Integer rating) {
+    public Movie(String title, String sinopse, Integer releaseYear, Integer durationMin, Integer rating, Genre genre) {
 
         this.title = title;
         this.sinopse = sinopse;
         this.releaseYear = releaseYear;
         this.durationMin = durationMin;
         this.rating = rating;
+        this.genre = genre;
 
     }
 }

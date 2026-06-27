@@ -25,6 +25,6 @@ public record MovieRequestDTO(
         @NotBlank(message = "A classificação indicativa é obrigatória.")
         Integer rating,
 
-        List<UUID> genreIds
+        UUID genreId
 ) {
 }
