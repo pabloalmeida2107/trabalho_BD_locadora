@@ -16,6 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Payment {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "payment_id", length = 36)
     private UUID paymentId;
 

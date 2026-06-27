@@ -15,8 +15,6 @@ public record RentalResponseDTO(
         LocalDate rentedAt,
         LocalDate returnedAt,
         LocalDate dueDate,
-        RentalStatus availabilityStatus,
+        RentalStatus rentalStatus,   // era: availabilityStatus
         List<PaymentResponseDTO> payments
-
-) {
-}
+) { }

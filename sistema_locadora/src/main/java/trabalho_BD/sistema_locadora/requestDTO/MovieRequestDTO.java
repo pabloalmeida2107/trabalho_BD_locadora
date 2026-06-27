@@ -1,30 +1,47 @@
 package trabalho_BD.sistema_locadora.requestDTO;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.UUID;
 
-public record MovieRequestDTO(
-        @NotBlank(message = "O título do filme é obrigatório.")
-        String title,
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class MovieRequestDTO {
 
-        @NotBlank(message = "A sinopse é obrigatória.")
-        String sinopse,
+    @NotBlank(message = "O título do filme é obrigatório.")
+    private String title;
 
-        @NotNull(message = "O ano de lançamento é obrigatório.")
-        @Positive(message = "Ano inválido.")
-        Integer releaseYear,
+    @NotBlank(message = "A sinopse é obrigatória.")
+    private String sinopse;
 
-        @NotNull(message = "A duração é obrigatória.")
-        @Positive(message = "Duração deve ser maior que zero.")
-        Integer durationMin,
+    @NotNull(message = "O ano de lançamento é obrigatório.")
+    @Positive(message = "Ano inválido.")
+    private Integer releaseYear;
 
-        @NotBlank(message = "A classificação indicativa é obrigatória.")
-        Integer rating,
+    @NotNull(message = "A duração é obrigatória.")
+    @Positive(message = "Duração deve ser maior que zero.")
+    private Integer durationMin;
 
-        UUID genreId
-) {
+    @NotNull(message = "A classificação indicativa é obrigatória.")
+    @Positive(message = "A classificação deve ser maior que zero.")
+    private Integer rating;
+
+    private UUID genreId;
+
+    // Ignorado na desserialização JSON (endpoint de update).
+    // Preenchido pelo binding multipart no endpoint de criação.
+    @JsonIgnore
+    private MultipartFile coverImage;
 }

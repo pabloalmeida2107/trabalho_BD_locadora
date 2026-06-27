@@ -1,6 +1,5 @@
 package trabalho_BD.sistema_locadora.responseDTO;
 
-import java.util.List;
 import java.util.UUID;
 
 public record MovieResponseDTO(
@@ -10,7 +9,6 @@ public record MovieResponseDTO(
         Integer releaseYear,
         Integer durationMin,
         Integer rating,
-        String genre
-
-) {
-}
+        String genre,
+        String coverImageUrl
+) {}

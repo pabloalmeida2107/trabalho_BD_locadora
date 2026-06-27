@@ -1,7 +1,8 @@
 package trabalho_BD.sistema_locadora.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import trabalho_BD.sistema_locadora.exception.ResourceNotFoundException;
 import trabalho_BD.sistema_locadora.models.Copy;
 import trabalho_BD.sistema_locadora.models.Movie;
 import trabalho_BD.sistema_locadora.repository.CopyRepository;
@@ -14,28 +15,22 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class CopyService {
 
     private final CopyRepository copyRepository;
     private final MovieRepository movieRepository;
 
-    public CopyService(CopyRepository copyRepository, MovieRepository movieRepository){
-        this.copyRepository = copyRepository;
-        this.movieRepository = movieRepository;
-    }
-
     public CopyResponseDTO create(CopyRequestDTO data) {
         Movie movie = movieRepository.findById(data.movieId())
-                .orElseThrow(() -> new RuntimeException("Movie not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Filme não encontrado!"));
 
         Copy copy = new Copy();
         copy.setMovie(movie);
         copy.setAvailabilityStatus(data.availabilityStatus());
         copy.setFormat(data.format());
 
-        Copy savedCopy = copyRepository.save(copy);
-        
-        return convertToDTO(savedCopy);
+        return convertToDTO(copyRepository.save(copy));
     }
 
     public List<CopyResponseDTO> findAll() {
@@ -45,29 +40,34 @@ public class CopyService {
     }
 
     public CopyResponseDTO findById(UUID id) {
-        Copy copy = copyRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Copy not found!"));
-        return convertToDTO(copy);
+        return convertToDTO(copyRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Cópia não encontrada!")));
     }
 
     public CopyResponseDTO update(UUID id, CopyRequestDTO data) {
         Copy copy = copyRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Copy not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Cópia não encontrada!"));
 
         Movie movie = movieRepository.findById(data.movieId())
-                .orElseThrow(() -> new RuntimeException("Movie not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Filme não encontrado!"));
 
         copy.setMovie(movie);
         copy.setAvailabilityStatus(data.availabilityStatus());
         copy.setFormat(data.format());
 
-        Copy updatedCopy = copyRepository.save(copy);
-        return convertToDTO(updatedCopy);
+        return convertToDTO(copyRepository.save(copy));
+    }
+
+    public Long countAvailableCopiesByMovie(UUID movieId) {
+        if (!movieRepository.existsById(movieId)) {
+            throw new ResourceNotFoundException("Filme não encontrado!");
+        }
+        return copyRepository.countAvailableCopiesByMovie(movieId);
     }
 
     public void delete(UUID id) {
         Copy copy = copyRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Copy not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Cópia não encontrada!"));
         copyRepository.delete(copy);
     }
 

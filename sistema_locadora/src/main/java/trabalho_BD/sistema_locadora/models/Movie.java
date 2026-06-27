@@ -38,6 +38,9 @@ public class Movie {
     @JoinColumn(name = "genre_id")
     private Genre genre;
 
+    @Column(name = "cover_image_path")
+    private String coverImagePath;
+
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Copy> copies = new ArrayList<>();
 
